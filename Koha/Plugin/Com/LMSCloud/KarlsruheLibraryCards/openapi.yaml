@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: bwCard KA-LIB API
+  description: |
+
+
+    ## card_status
+     * **card_status** (get): returns card status for KA-LIB members <br> status code 200 (OK) on success
+     * **card_status** (post): distribute card status for KA-LIB to members<br> status code 202 (Accepted) on success
+  contact:
+    name: bwcard Team KIT
+    url: https://www.bwcard.de/149.php
+    email: service@bwcard.de
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.0
+paths:
+  /card_status/{card_number}:
+    get:
+      x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#getCardStatus
+      summary: get Karlsruhe library card status from card number
+      operationId: getKarlsruheLibraryCardStatus
+      security:
+        - APIKeyHeader: []
+      parameters:
+        - name: card_number
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 12
+            maxLength: 12
+            pattern: ^[0-9]*$
+            description: Card Number with 12 digits
+            title: Card Number
+          description: Card Number with 12 digits
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /card_status:
+    post:
+      x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#setCardStatus
+      summary: set card status for card number
+      operationId: set_card_status_card_status_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardStatus'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+        - APIKeyHeader: []
+  /health_check:
+    get:
+      x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#healthCheck
+      summary: Health Check
+      operationId: health_check_health_check_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+        - APIKeyHeader: []
+components:
+  schemas:
+    CardStatus:
+      properties:
+        card_status:
+          type: string
+          title: Card Status
+          description: The status of the card
+        card_number:
+          type: string
+          title: Card Number
+          description: The card number
+      type: object
+      required:
+        - card_status
+        - card_number
+      title: CardStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+tags:
+  - name: status
+    description: get card status from card number
