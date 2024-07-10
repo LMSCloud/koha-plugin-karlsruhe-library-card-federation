@@ -186,7 +186,7 @@ jobs:
           ${{ steps.kpz.outputs.filename }}
           CHANGELOG.md
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
 
   keepalive:
     name: Keep Alive
