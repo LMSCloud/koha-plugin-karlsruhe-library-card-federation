@@ -19,13 +19,13 @@ use Modern::Perl;
 
 use base qw(Koha::Plugins::Base);
 
-our $VERSION = "{VERSION}";
+our $VERSION = "v0.0.2";
 
 our $metadata = {
     name            => 'Karlsruhe Library Card Federation Plugin',
     author          => 'LMSCloud GmbH',
     date_authored   => '2024-07-09',
-    date_updated    => '1900-01-01',
+    date_updated    => '2024-07-10',
     minimum_version => '22.11.15.011',
     maximum_version => undef,
     version         => $VERSION,
