@@ -66,6 +66,34 @@ sub api_namespace {
     return 'kalibfed';
 }
 
+sub configure {
+    my ( $self, $args ) = @_;
+    my $cgi = $self->{'cgi'};
+
+    unless ( $cgi->param('save') ) {
+        my $template = $self->get_template({ file => 'configure.tt' });
+
+        ## Grab the values we already have for our settings, if any exist
+        $template->param(
+            api_keys         => $self->retrieve_data('api_keys'),
+            local_prefix     => $self->retrieve_data('local_prefix'),
+            kalib_prefixes   => $self->retrieve_data('kalib_prefixes'),
+        );
+
+        $self->output_html( $template->output() );
+    }
+    else {
+        $self->store_data(
+            {
+                api_keys         => $cgi->param('api_keys'),
+                local_prefix     => $cgi->param('local_prefix'),
+                kalib_prefixes   => $cgi->param('kalib_prefixes'),
+            }
+        );
+        $self->go_home();
+    }
+}
+
 # Mandatory even if does nothing
 sub install {
     my ( $self, $args ) = @_;

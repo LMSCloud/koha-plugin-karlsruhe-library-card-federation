@@ -43,7 +43,12 @@ sub setCardStatus {
 sub healthCheck {
     my $c = shift->openapi->valid_input or return;
     
-    my $response = { status => "ok" };
+    my $apikey = $c->req->headers->header('X-API-KEY');
+    if ( $apikey eq 'YpLhYPpcR/7Nq2LCFptsacx/efCZ' ) {
+        $apikey = 'key ok';
+    }
+    
+    my $response = { status => "ok $apikey" };
     
     return $c->render(status  => 200, openapi => $response );
 }

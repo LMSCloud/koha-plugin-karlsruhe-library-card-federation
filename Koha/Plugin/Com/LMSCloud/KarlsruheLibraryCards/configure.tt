@@ -1,0 +1,62 @@
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+ <title>Koha: Karlsruher Bibliotheksausweis-Kartenföderation: Konfiguration</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; Karlsruher Bibliotheksausweis-Kartenföderation &rsaquo; Konfiguration</div>
+
+<div id="doc3">
+
+    <h3>Karlsruher Bibliotheksausweis-Kartenföderation: Konfiguration</h3>
+
+    <!-- Notice our form here has no 'action', this is good, it means that our forms will always get passed back to 'plugins/run.pl'. You could hard code it instead if you prefer -->
+    <form method="post">
+        <!-- Always pass these two parameters so the plugin system knows what to execute! -->
+        <input type="hidden" name="class" value="[% CLASS %]"/>
+        <input type="hidden" name="method" value="[% METHOD %]"/>
+
+        <label for="bar">4-stelliger Präfix der lokalen Ausweisnummern: </label>
+        <input type="text" name="local_prefix" value="[% local_prefix %]" />
+
+        <p>
+        
+        <label for="bar">Präfixe der Ausweisnummern anderer Kartenföderationsmitgilieder (getrennt durch ein Pipe-Zeichen): </label>
+        <input type="text" name="kalib_prefixes" value="[% kalib_prefixes %]" />
+
+        <p>
+        
+        <label for="enable_opac_payments">API-Keys für den Zugriff auf die lokalen Kartenföderation-Services: </label>
+        <textarea id="story" name="api_keys" rows="5" cols="100">[% api_keys | html %]</textarea>
+
+        <p>
+        
+        <label for="bar">URL des zentralen Services der Kartenföderation: </label>
+        <input type="text" name="kalib_service" value="[% kalib_service %]" size="40"/>
+        
+        <p>
+        
+        <label for="bar">API-Key des zentralen Services der Kartenföderation: </label>
+        <input type="text" name="kalib_key" value="[% kalib_key %]" size="40"/>
+        
+        <p>
+        
+        <input type="hidden" name="save" value="1" />
+        <input type="submit" value="Konfiguration speichern" />
+    </form>
+
+    <hr/>
+
+    <p>
+        <h5>Update-Status</h5>
+        [% IF last_upgraded %]
+            Das Plugin wurde zuletzt upgedated auf diesem System am [% last_upgraded | $KohaDates with_hours => 1 %]
+        [% ELSE %]
+            Das Plugin wurde bisher noch nicht upgedated.
+        [% END %]
+    </p>
+
+[% INCLUDE 'intranet-bottom.inc' %]
