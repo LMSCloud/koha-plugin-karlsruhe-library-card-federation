@@ -1,62 +1,125 @@
 [% USE KohaDates %]
+[% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% PROCESS 'html_helpers.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
- <title>Koha: Karlsruher Bibliotheksausweis-Kartenföderation: Konfiguration</title>
+<title>Koha: Karlsruher Bibliotheksausweis-Kartenföderation: Konfiguration</title>
 [% INCLUDE 'doc-head-close.inc' %]
+
+    <style>
+    fieldset.rows label {
+        width: 25rem;
+    }
+    </style>
 </head>
-<body>
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+<body id="kalib_configuration">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; Karlsruher Bibliotheksausweis-Kartenföderation &rsaquo; Konfiguration</div>
-
-<div id="doc3">
-
-    <h3>Karlsruher Bibliotheksausweis-Kartenföderation: Konfiguration</h3>
-
-    <!-- Notice our form here has no 'action', this is good, it means that our forms will always get passed back to 'plugins/run.pl'. You could hard code it instead if you prefer -->
-    <form method="post">
-        <!-- Always pass these two parameters so the plugin system knows what to execute! -->
-        <input type="hidden" name="class" value="[% CLASS %]"/>
-        <input type="hidden" name="method" value="[% METHOD %]"/>
-
-        <label for="bar">4-stelliger Präfix der lokalen Ausweisnummern: </label>
-        <input type="text" name="local_prefix" value="[% local_prefix %]" />
-
-        <p>
-        
-        <label for="bar">Präfixe der Ausweisnummern anderer Kartenföderationsmitgilieder (getrennt durch ein Pipe-Zeichen): </label>
-        <input type="text" name="kalib_prefixes" value="[% kalib_prefixes %]" />
-
-        <p>
-        
-        <label for="enable_opac_payments">API-Keys für den Zugriff auf die lokalen Kartenföderation-Services: </label>
-        <textarea id="story" name="api_keys" rows="5" cols="100">[% api_keys | html %]</textarea>
-
-        <p>
-        
-        <label for="bar">URL des zentralen Services der Kartenföderation: </label>
-        <input type="text" name="kalib_service" value="[% kalib_service %]" size="40"/>
-        
-        <p>
-        
-        <label for="bar">API-Key des zentralen Services der Kartenföderation: </label>
-        <input type="text" name="kalib_key" value="[% kalib_key %]" size="40"/>
-        
-        <p>
-        
-        <input type="hidden" name="save" value="1" />
-        <input type="submit" value="Konfiguration speichern" />
-    </form>
-
-    <hr/>
-
-    <p>
-        <h5>Update-Status</h5>
-        [% IF last_upgraded %]
-            Das Plugin wurde zuletzt upgedated auf diesem System am [% last_upgraded | $KohaDates with_hours => 1 %]
-        [% ELSE %]
-            Das Plugin wurde bisher noch nicht upgedated.
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
         [% END %]
-    </p>
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Karlsruher Bibliotheksausweis-Kartenföderation &rsaquo; Konfiguration</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
+
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <main>
+
+                    <h1>Karlsruher Bibliotheksausweis-Kartenföderation: Konfiguration</h3>
+
+                    <!-- Notice our form here has no 'action', this is good, it means that our forms 
+                         will always get passed back to 'plugins/run.pl'. You could hard code it instead if you prefer 
+                    -->
+                    <form method="post">
+                        <!-- Always pass these two parameters so the plugin system knows what to execute! -->
+                            
+                        <input type="hidden" name="class" value="[% CLASS %]"/>
+                        <input type="hidden" name="method" value="[% METHOD %]"/>
+                            
+                        <fieldset class="rows">
+                            
+                            <legend>Präfixe:</legend>
+                            <ol>
+                                <li>
+                                    <label for="bar">4-stelliger Präfix der lokalen Ausweisnummern: </label>
+                                    <input type="text" name="local_prefix" value="[% local_prefix %]" />
+                                </li>
+                                <li>
+                                    <label for="bar">Präfixe der Ausweisnummern anderer Kartenföderationsmitgilieder (getrennt durch Pipe-Zeichen): </label>
+                                    <input type="text" name="kalib_prefixes" value="[% kalib_prefixes %]" />
+                                <li>
+                            </ol>
+                        </fieldset>
+                        
+                        <fieldset class="rows">
+                            <legend>Lokaler Service der Kartenföderation:</legend>
+                            <ol>
+                                <li>
+                                    <label for="enable_opac_payments">API-Keys für den Zugriff auf die lokalen Kartenföderation-Services: </label>
+                                    <textarea id="story" name="api_keys" rows="8" cols="70">[% api_keys | html %]</textarea>
+                                <li>
+                                <li>
+                                    <label for="bar">Prüfe beim Zugriff auf folgende Client-IPs (getrennt durch Pipe-Zeichen):</label>
+                                    <input type="text" name="ip_check" value="[% ip_check %]" size="70"/>
+                                </li>
+                                <li>
+                                    <label for="bar">Codes der Sperren (getrennt durch Pipe-Zeichen), die zur Sperrung eines Ausweises in der Kartenföderation führen:</label>
+                                    <input type="text" name="local_debarment_types" value="[% local_debarment_types %]" size="70"/>
+                                </li>
+                                <li>
+                                    <label for="bar">Code der Sperre, die bei Sperrung durch die Kartenföderation gesetzt wird:</label>
+                                    <input type="text" name="set_debarment_type" value="[% set_debarment_type %]" size="10"/>
+                                </li>
+                                <li>
+                                    <label for="bar">Kommentar der Sperre, die bei Sperrung durch die Kartenföderation gesetzt wird:</label>
+                                    <input type="text" name="set_debarment_comment" value="[% set_debarment_comment %]" size="70"/>
+                                </li>
+                            </ol>
+                        </fieldset>
+
+                        <fieldset class="rows">
+                            <legend>Zentraler Services der Kartenföderation:</legend>
+                            <ol>
+                                <li>
+                                    <label for="bar">URL des zentralen Services der Kartenföderation: </label>
+                                    <input type="text" name="kalib_service" value="[% kalib_service %]" size="70"/>
+                                <li>
+                                <li>
+                                    <label for="bar">API-Key des zentralen Services der Kartenföderation: </label>
+                                    <input type="text" name="kalib_key" value="[% kalib_key %]" size="70"/>
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="hidden" name="save" value="1" />
+                            <input type="submit" value="Konfiguration speichern" />
+                        </fieldset>
+                    </form>
+
+                    <hr/>
+
+                    <h2>Update-Status</h5>
+                    [% IF last_upgraded %]
+                        Das Plugin wurde zuletzt upgedated auf diesem System am [% last_upgraded | $KohaDates with_hours => 1 %]
+                    [% ELSE %]
+                        Das Plugin wurde bisher noch nicht upgedated.
+                    [% END %]
+                </main>
+            </div>
+        </div>
+    </div>
+[% MACRO jsinclude BLOCK %]
+
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

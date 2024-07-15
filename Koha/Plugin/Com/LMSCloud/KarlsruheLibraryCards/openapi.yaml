@@ -19,7 +19,7 @@ paths:
   /card_status/{card_number}:
     get:
       x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#getCardStatus
-      summary: get Karlsruhe library card status from card number
+      summary: get Karlsruhe library card status of local cards by card number
       operationId: kalib-get-card-status
       produces: 
         - application/json
@@ -55,6 +55,18 @@ paths:
             properties:
               detail:
                 type: string
+        "401":
+          description: Invalid API key
+          schema:
+            properties:
+              detail:
+                type: string
+        "404":
+          description: Patron not found
+          schema:
+            properties:
+              detail:
+                type: string
         "422":
           description: Validation Error
           schema:
@@ -71,6 +83,48 @@ paths:
                       type: string
                     type:
                       type: string
+  /check_card_status/{card_number}:
+    get:
+      x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#checkCardStatus
+      summary: get Karlsruhe library card status of remote cards by card number
+      operationId: kalib-check-card-status
+      produces: 
+        - application/json
+      security:
+        - APIKeyHeader: []
+      parameters:
+        - name: card_number
+          in: path
+          required: true
+          type: string
+          minLength: 12
+          maxLength: 12
+          pattern: ^[0-9]*$
+          description: Card Number with 12 digits
+      responses:
+        "200":
+          description: Successful Response
+          schema:
+            properties:
+              card_status:
+                type: string
+                description: The status of the card
+              card_number:
+                type: string
+                description: The card number
+            type: object
+            required:
+              - card_status
+              - card_number
+        "400":
+          description: Error etrieving the card status
+          schema:
+            properties:
+              detail:
+                type: string
+      x-koha-authorization:
+        permissions:
+          borrowers: edit_borrowers
   /card_status:
     post:
       x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#setCardStatus
@@ -121,6 +175,12 @@ paths:
             properties:
               detail:
                 type: string
+        "401":
+          description: Invalid API key
+          schema:
+            properties:
+              detail:
+                type: string
         "422":
           description: Validation Error
           schema:
@@ -137,8 +197,6 @@ paths:
                       type: string
                     type:
                       type: string
-      security:
-        - APIKeyHeader: []
   /health_check:
     get:
       x-mojo-to: Com::LMSCloud::KarlsruheLibraryCards::LibraryCardController#healthCheck
@@ -150,10 +208,9 @@ paths:
         '200':
           description: Successful Response
           schema: {}
-      security:
-        - APIKeyHeader: []
-securityDefinitions:
-  APIKeyHeader:
-    type: apiKey
-    in: header
-    name: X-API-KEY
+        "401":
+          description: Invalid API key
+          schema:
+            properties:
+              detail:
+                type: string
