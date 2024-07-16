@@ -56,7 +56,10 @@ Run:
 ```
 /var/lib/koha/<KOHA-INSTANCE-NAME>/plugins/Koha/Plugin/Com/LMSCloud/KarlsruheLibraryCards/pushAndUpdateLibraryCardChanges.pl
 ```
-The program writes a Log file under /var/log/koha/<KOHA-INSTANCE-NAME>/cardlib-pusher.log.
+The program writes a Log file under 
+```
+/var/log/koha/<KOHA-INSTANCE-NAME>/cardlib-pusher.log
+```
 ### Retrieve the card status of all oreign cards from the central card service
 Run:
 ```
