@@ -220,17 +220,23 @@ sub intranet_js {
     }
     return q!
 $(document).ready(function(){
-    $('#pat_memberentrygen #cardnumber').after('<span id="checkKALibCard" style="margin-left:1em"><a class="btn btn-sm btn-primary" onclick="checkKALibCard();return false;" disabled>KA-Ausweis prüfen</a></span>');
-    $("#pat_memberentrygen #cardnumber").keyup(function(e) {
-        var currentValue = $(this).val();
-        if( currentValue.length == 12 ! . ($checkPrefixes || '') . q!) {
-            $("#pat_memberentrygen #checkKALibCard a").removeAttr('disabled');
-        }
-        else {
-            $("#pat_memberentrygen #checkKALibCard a").attr('disabled','disabled');
-       }
-    });
+    if ( $("#pat_memberentrygen #cardnumber").length ) {
+        $('#pat_memberentrygen #cardnumber').after('<span id="checkKALibCard" style="margin-left:1em"><a class="btn btn-sm btn-primary" onclick="checkKALibCard();return false;" disabled>KA-Ausweis prüfen</a></span>');
+        $("#pat_memberentrygen #cardnumber").keyup(function(e) {
+            enableDisableCheckKALibCard();
+        });
+        enableDisableCheckKALibCard();
+    }
 });
+function enableDisableCheckKALibCard() {
+    var currentValue = $(#pat_memberentrygen #cardnumber").val();
+    if( currentValue.length == 12 ! . ($checkPrefixes || '') . q!) {
+        $("#pat_memberentrygen #checkKALibCard a").removeAttr('disabled');
+    }
+    else {
+        $("#pat_memberentrygen #checkKALibCard a").attr('disabled','disabled');
+   }
+}
 function checkKALibCard() {
     var cardNumber = $("#pat_memberentrygen #cardnumber").val();
     $.ajax({
@@ -253,7 +259,7 @@ function checkKALibCard() {
                                 'Es konnte kein gültiger Status des Ausweises ermittelt werden.' +
                                 '</div>';
                   }
-                  showKALibCard(message,cardNumber);
+                  showKALibCardCheckResult(message,cardNumber);
               },
               error: function (data) {
               	  var error = data.responseJSON;
@@ -262,11 +268,11 @@ function checkKALibCard() {
                             'Bei der Abfrage des Kartenstatus trat ein Fehler auf.<br>' + 
                             error.detail + 
                             '</div>';
-                  showKALibCard(message,cardNumber);
+                  showKALibCardCheckResult(message,cardNumber);
               },
     });
 }
-function showKALibCard(displayMessage,cardNumber) {
+function showKALibCardCheckResult(displayMessage,cardNumber) {
     var popupTemplate =
         '<div class="modal" id="kalibStatusMessage_dialog" tabindex="-1" role="dialog" aria-labelledby="kalibStatusMessage_label" aria-hidden="true">' +
         '  <div class="modal-dialog">' +
