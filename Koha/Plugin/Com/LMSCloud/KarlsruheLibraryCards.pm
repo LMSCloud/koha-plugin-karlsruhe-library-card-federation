@@ -219,9 +219,10 @@ sub intranet_js {
         $checkPrefixes = '&& currentValue.match(/^(' . join('|',@checkPrefixList) . ')/)';
     }
     return q!
+<script>
 $(document).ready(function(){
     if ( $("#pat_memberentrygen #cardnumber").length ) {
-        $('#pat_memberentrygen #cardnumber').after('<span id="checkKALibCard" style="margin-left:1em"><a class="btn btn-sm btn-primary" onclick="checkKALibCard();return false;" disabled>KA-Ausweis prüfen</a></span>');
+        $('#pat_memberentrygen #cardnumber').after('<span id="checkKALibCard" style="margin-left:1em"><a role="button" class="btn btn-sm btn-primary" onclick="checkKALibCard();return false;" disabled>KA-Ausweis pr&uuml;fen</a></span>');
         $("#pat_memberentrygen #cardnumber").keyup(function(e) {
             enableDisableCheckKALibCard();
         });
@@ -229,12 +230,12 @@ $(document).ready(function(){
     }
 });
 function enableDisableCheckKALibCard() {
-    var currentValue = $(#pat_memberentrygen #cardnumber").val();
+    var currentValue = $("#pat_memberentrygen #cardnumber").val();
     if( currentValue.length == 12 ! . ($checkPrefixes || '') . q!) {
-        $("#pat_memberentrygen #checkKALibCard a").removeAttr('disabled');
+        $("#pat_memberentrygen #checkKALibCard a").css('pointer-events','all').removeAttr('disabled');
     }
     else {
-        $("#pat_memberentrygen #checkKALibCard a").attr('disabled','disabled');
+        $("#pat_memberentrygen #checkKALibCard a").css('pointer-events','none').attr('disabled','disabled');
    }
 }
 function checkKALibCard() {
@@ -246,7 +247,7 @@ function checkKALibCard() {
               	  var message;
                   if ( data.card_status == 'active' ) {
                       message = '<div class="alert alert-success" role="alert">' + 
-                                'Der Ausweis ist gültig.' +
+                                'Der Ausweis ist g&uuml;ltig.' +
                                 '</div>';
                   }
                   else if ( data.card_status == 'locked' ) {
@@ -256,18 +257,25 @@ function checkKALibCard() {
                   }
                   else {
                       message = '<div class="alert alert-warning" role="alert">' + 
-                                'Es konnte kein gültiger Status des Ausweises ermittelt werden.' +
+                                'Es konnte kein g&uuml;ltiger Status des Ausweises ermittelt werden.' +
                                 '</div>';
                   }
                   showKALibCardCheckResult(message,cardNumber);
               },
               error: function (data) {
               	  var error = data.responseJSON;
+                  console.log(data);
                   var message = 
                             '<div class="alert alert-warning" role="alert">' +
                             'Bei der Abfrage des Kartenstatus trat ein Fehler auf.<br>' + 
                             error.detail + 
                             '</div>';
+                  if ( data.status == 404 ) {
+                       message = 
+                            '<div class="alert alert-danger" role="alert">' +
+                            'Diese Karte ist nicht g&uuml;ltig. Es wurden keine Informationen zu der Kartennummer ' + cardNumber + ' gefunden.' +
+                            '</div>';
+                  }
                   showKALibCardCheckResult(message,cardNumber);
               },
     });
@@ -279,7 +287,7 @@ function showKALibCardCheckResult(displayMessage,cardNumber) {
         '    <div class="modal-content">' +
         '      <div class="modal-header">' +
         '        <button type="button" class="kalibStatusMessage_close closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-        '        <h3 id="kalibStatusMessage_title">Ergebnis der KA-Ausweisprüfung für ' + cardNumber + '</h3>' +
+        '        <h3 id="kalibStatusMessage_title">Ergebnis der KA-Ausweispr&uuml;fung f&uuml;r ' + cardNumber + '</h3>' +
         '      </div>' +
         '      <div class="modal-body">' +
         '      <p><div id="kalibStatusMessage_message">' + displayMessage + '</div><p>' +
@@ -292,6 +300,7 @@ function showKALibCardCheckResult(displayMessage,cardNumber) {
     $(popupTemplate).modal();
     $(popupTemplate).show();
 }
+</script>
     !;
 }
 

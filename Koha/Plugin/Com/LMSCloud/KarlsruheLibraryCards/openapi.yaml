@@ -122,6 +122,12 @@ paths:
             properties:
               detail:
                 type: string
+        "404":
+          description: Card not found
+          schema:
+            properties:
+              detail:
+                type: string
       x-koha-authorization:
         permissions:
           borrowers: edit_borrowers

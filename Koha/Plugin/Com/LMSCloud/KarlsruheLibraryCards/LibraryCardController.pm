@@ -150,6 +150,9 @@ sub checkCardStatus {
         my $result = $cardService->getCardStatus($cardNumber);
         
         if ( $result->{is_error} ) {
+            if ( $result->{status} == 404 ) {
+                return $c->render(status  => 404, openapi => { detail => $result->{error_message} } );
+            }
             return $c->render(status  => 400, openapi => { detail => $result->{error_message} } );
         }
         if ( $result->{is_success} ) {

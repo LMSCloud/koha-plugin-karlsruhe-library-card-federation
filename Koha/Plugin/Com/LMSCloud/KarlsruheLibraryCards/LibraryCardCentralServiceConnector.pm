@@ -42,7 +42,8 @@ sub getCardStatus {
     my $self = shift;
     my $cardNumber = shift;
     
-    my $response = { is_success => 0, is_error => 0, error_message => undef, card_number => $cardNumber, card_status => 'active' };
+    my $json = JSON->new->utf8;
+    my $response = { is_success => 0, is_error => 0, error_message => undef, card_number => $cardNumber, card_status => 'active', status => '200' };
     
     if ( $self->{serviceURL} && $self->{serviceKey} ) {
         my $serviceURI = $self->{serviceURL};
@@ -59,8 +60,8 @@ sub getCardStatus {
                         "X-API-KEY" => "$serviceAPIKey",
                     );
                     
+        $response->{status} = $resp->code;
         if ($resp->is_success) {
-            my $json = JSON->new->utf8;
             my $content = $resp->content;
             my $result = $json->decode( $content );
             if ( $result && exists( $result->{card_number} ) && $result->{card_number} eq $cardNumber ) {
@@ -85,11 +86,21 @@ sub getCardStatus {
                 $response->{error_message} = "Undexpected check card response: " . $content;
             }
         } else {
-            my $message = $resp->status_line;
+            my $contentStruct;
             my $content = $resp->content;
-            $message .= ". Error message: " . $content if ($content);
-            $response->{is_error} = 1;
-            $response->{error_message} = "Unable to retrieve card status using $serviceURI: $message";
+            eval {
+                $contentStruct = $json->decode( $content );
+            };
+            if ( $resp->code == 404 && $contentStruct && defined($contentStruct->{detail}) )  {
+                $response->{is_error} = 1;
+                $response->{error_message} = $contentStruct->{detail};
+            }
+            else {
+                my $message = $resp->status_line;
+                $message .= ". Error message: " . $content if ($content);
+                $response->{is_error} = 1;
+                $response->{error_message} = "Unable to retrieve card status using $serviceURI: $message";
+            }
         }
     }
     else {
