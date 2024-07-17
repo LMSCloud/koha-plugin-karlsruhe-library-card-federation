@@ -107,14 +107,6 @@
                         </fieldset>
                     </form>
 
-                    <hr/>
-
-                    <h2>Update-Status</h5>
-                    [% IF last_upgraded %]
-                        Das Plugin wurde zuletzt upgedated auf diesem System am [% last_upgraded | $KohaDates with_hours => 1 %]
-                    [% ELSE %]
-                        Das Plugin wurde bisher noch nicht upgedated.
-                    [% END %]
                 </main>
             </div>
         </div>
