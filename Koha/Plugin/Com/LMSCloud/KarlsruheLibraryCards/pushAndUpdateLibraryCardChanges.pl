@@ -16,6 +16,7 @@
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
 use Data::Dumper;
 
 # include the deffault Koha lib directory

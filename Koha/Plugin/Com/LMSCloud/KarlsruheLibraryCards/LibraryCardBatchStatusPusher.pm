@@ -16,13 +16,14 @@ package Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::LibraryCardBatchStat
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
 
 use Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::LibraryCardCentralServiceConnector;
 use Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::LibraryCardChangeDetector;
 use C4::Context;
 
 use Log::Log4perl;
-use JSON qw( encode_json );
+use JSON;
 
 sub new {
     my ( $class ) = @_;
@@ -124,16 +125,17 @@ sub pushStatusUpdateAndSetLocalStatus {
     
     my $logger = $self->{logger};
     
-    $logger->info("Processing status new update: " . encode_json($statusData));
+    my $json = JSON->new->utf8;
+    $logger->info("Processing status new update: " . $json->encode($statusData));
     
     if ( $cardnumber && length($cardnumber) == 12 && $cardnumber =~ /^$localPrefix/ && exists($statusData->{send_card_status}) ) {
         my $result = $self->{pusher}->setCardStatus($cardnumber,$statusData->{send_card_status});
         
         if ( $result->{is_error} ) {
             $pushstatus = 0;
-            $logger->error("Pushed status update with result: " . encode_json($result));
+            $logger->error("Pushed status update with result: " . $json->encode($result));
         } else {
-            $logger->info("Pushed status update with result: " . encode_json($result));
+            $logger->info("Pushed status update with result: " . $json->encode($result));
         }
     }
     

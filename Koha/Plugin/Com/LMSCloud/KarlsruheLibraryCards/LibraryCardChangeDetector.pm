@@ -16,6 +16,8 @@ package Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::LibraryCardChangeDet
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
+
 use Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards;
 use C4::Context;
 

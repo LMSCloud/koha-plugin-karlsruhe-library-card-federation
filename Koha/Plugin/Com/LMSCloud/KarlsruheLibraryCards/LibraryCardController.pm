@@ -16,9 +16,10 @@ package Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::LibraryCardControlle
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
 
 use Net::IP;
-use JSON qw( decode_json );
+use JSON;
 
 use Data::Dumper;
 
@@ -187,7 +188,8 @@ sub checkApiKey {
     
     my $retval = 0;
     if ( $apikey ) {
-        my $keyconfigs = decode_json($plugin->retrieve_data('api_keys') || '[]');
+        my $json = JSON->new->utf8;
+        my $keyconfigs = $json->decode($plugin->retrieve_data('api_keys') || '[]');
         foreach my $keyconfig (@$keyconfigs) {
             my $checkkey = $keyconfig->{apikey};
             if ( $apikey eq $checkkey ) {

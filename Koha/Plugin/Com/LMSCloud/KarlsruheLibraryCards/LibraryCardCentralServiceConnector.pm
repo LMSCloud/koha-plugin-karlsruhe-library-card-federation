@@ -16,6 +16,7 @@ package Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::LibraryCardCentralSe
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
 use URI;
 use LWP::UserAgent;
 use JSON;

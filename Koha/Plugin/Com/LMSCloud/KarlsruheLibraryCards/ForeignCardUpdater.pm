@@ -16,6 +16,7 @@ package Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards::ForeignCardUpdater;
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
 
 use C4::Context;
 use Koha::Patrons;

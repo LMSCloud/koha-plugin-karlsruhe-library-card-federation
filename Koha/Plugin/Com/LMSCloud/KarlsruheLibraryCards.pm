@@ -16,12 +16,13 @@ package Koha::Plugin::Com::LMSCloud::KarlsruheLibraryCards;
 # This program comes with ABSOLUTELY NO WARRANTY;
 
 use Modern::Perl;
+use utf8;
 
 use base qw(Koha::Plugins::Base);
 
 use C4::Context;
 
-our $VERSION = "0.0.5";
+our $VERSION = "0.0.6";
 
 our $metadata = {
     name            => 'Karlsruhe Library Card Federation Plugin',
