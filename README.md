@@ -8,14 +8,14 @@ The plugin provides the following features:
   * The URL of the central card service
   * The API key of the central card service
   * Remote service IPs, that are allowed to access the service
-  * Local debarment types that signal, that a local card shoudl be blocked within the federation
+  * Local debarment types that signal, that a local card should be blocked within the federation
   * A debarment type to set if a foreign cards is blocked 
   * A comment to set with debarments of foreign cards
 * API functions to check the local status of a local library card
   * Check the local cards status using: /api/v1/contrib/kalibfed/card_status/{card_number}
   * Push a status update of a remote card: /api/v1/contrib/kalibfed/card_status
 * An API function the check a remote card with in the Koha staff interface
-* An implementation to check the status of foreign cards udn push status update of local cards to the central card service
+* An implementation to check the status of foreign cards and to push status updates of local cards to the central card service
 * A batch function to check local cards regularly for changes (deletes or new debarments) in order to push the changes to the central service
 * A batch function to update all foreign cards based on the status received from the central service
 
@@ -29,8 +29,8 @@ Look for:
 * kalib-check-card-status
 * kalib-get-card-status
 * kalib-health-status
-* kalib-set-card-status**
-### Test: push a card update for an foreign card number
+* kalib-set-card-status
+### Test: push a card update for a foreign card number
 ```
 curl -X 'POST' \
   'https://<KOHA-URL>/api/v1/contrib/kalibfed/card_status' \
@@ -56,15 +56,15 @@ Run:
 ```
 /var/lib/koha/<KOHA-INSTANCE-NAME>/plugins/Koha/Plugin/Com/LMSCloud/KarlsruheLibraryCards/pushAndUpdateLibraryCardChanges.pl
 ```
-The program writes a Log file under 
+The program writes a log file under 
 ```
 /var/log/koha/<KOHA-INSTANCE-NAME>/cardlib-pusher.log
 ```
-### Retrieve the card status of all oreign cards from the central card service
+### Retrieve the card status of all foreign cards from the central card service
 Run:
 ```
 /var/lib/koha/<KOHA-INSTANCE-NAME>/plugins/Koha/Plugin/Com/LMSCloud/KarlsruheLibraryCards/updateAllForeignCards.pl
 ```
-If cards are blocked a local debarment of the configured type will bed added.
-If cards are active and blocked locally, an possibly existing debarment  of the configured type will be removed.
+If cards are blocked, a local debarment of the configured type will be added.
+If cards are active and blocked locally, a possibly existing debarment of the configured type will be removed.
 The program writes all output to the standard output device.
