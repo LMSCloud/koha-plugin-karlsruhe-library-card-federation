@@ -73,8 +73,12 @@ sub updateForeignCardStatus {
             my $result = $self->updateCardStatus($cardNumber,$cardStatus);
             print "$cardNumber => $result\n";
         }
+        elsif ( $response->{status} && $response->{status} eq '404' ) {
+            my $result = $self->updateCardStatus($cardNumber,'locked');
+            print "$cardNumber => $result\n";
+        }
         else {
-            print "$cardNumber => Error retrieving card stateusing central service: ", $response->{error_message}, "\n";
+            print "$cardNumber => Error retrieving card state using central service: ", $response->{error_message}, "\n";
         }
     }
 }
@@ -117,16 +121,26 @@ sub updateCardStatus {
                         expiration     => undef,
                     }
                 );
+                $result = 'new debarment set';
+            }
+            else {
+                $result = 'status locked, no change';
             }
         }
         if ( $cardStatus eq 'active' ) {
             my $debarrments = $patron->restrictions;
+            my $changed = 0;
             while( my $debarment = $debarrments->next ) {
                 my $debartype = $debarment->type->code;
                 if ( $debartype eq $debarmentType ) 
                 {
                     DelDebarment( $debarment->borrower_debarment_id );
+                    $result = 'debarment removed';
+                    $changed = 1;
                 }
+            }
+            if (! $changed) {
+                $result = 'status active, no change';
             }
         }
     } else {
