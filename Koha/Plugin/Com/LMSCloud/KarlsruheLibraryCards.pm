@@ -130,13 +130,13 @@ sub install {
     my $table = $self->get_qualified_table_name('cardnumber_status');
 
     C4::Context->dbh->do( "
-        CREATE TABLE IF NOT EXISTS koha_plugin_com_lmscloud_karlsruhelibrarycards_cardnumber_status (
+        CREATE TABLE IF NOT EXISTS $table (
             `cardnumber` varchar(32) NOT NULL COMMENT 'card number of Koha accounts',
             `cardstatus` enum('active','deleted','locked') NOT NULL COMMENT 'status of the cards',
             `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of last update',
             PRIMARY KEY (`cardnumber`),
             KEY `updated_on` (`updated_on`)
-        ) ENGINE = INNODB
+        ) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     " );
     
     C4::Context->dbh->do( "
