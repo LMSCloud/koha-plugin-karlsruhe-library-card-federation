@@ -24,7 +24,10 @@ Just download and install the plugin. Configure the plugin and restart plack ser
 
 ## Details using the added API functions
 ### Service description
-A description of the service is available after installation with the default API documentation: http://<KOHA-URL>/api/v1/.html
+A description of the service is available after installation with the default API documentation: 
+```
+http://<KOHA-URL>/api/v1/.html
+```
 Look for:
 * kalib-check-card-status
 * kalib-get-card-status
