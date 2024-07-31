@@ -128,7 +128,7 @@ sub setCardStatus {
         
         my $uri = URI->new($serviceURI);
         my $json = JSON->new->utf8;
-        my $content = { card_number => $cardNumber, cardStatus => $cardStatus };
+        my $content = { card_number => $cardNumber, card_status => $cardStatus };
         
         my $req = HTTP::Request->new( 'POST', $uri );
         $req->header( 'Content-Type' => 'application/json', 'accept' => 'application/json' , "X-API-KEY" => "$serviceAPIKey");
