@@ -5,8 +5,6 @@ on:
       - master
     tags:
       - 'v*.*.*'
-  schedule:
-    - cron: "0 6 * * *"
 jobs:
   unit_tests:
     name: Run unit tests
