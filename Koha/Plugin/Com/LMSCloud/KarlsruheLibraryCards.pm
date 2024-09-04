@@ -22,7 +22,7 @@ use base qw(Koha::Plugins::Base);
 
 use C4::Context;
 
-our $VERSION = "1.0.0";
+our $VERSION = "1.0.1";
 
 our $metadata = {
     name            => 'Karlsruhe Library Card Federation Plugin',
