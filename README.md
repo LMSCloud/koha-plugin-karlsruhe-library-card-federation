@@ -71,3 +71,11 @@ Run:
 If cards are blocked, a local debarment of the configured type will be added.
 If cards are active and blocked locally, a possibly existing debarment of the configured type will be removed.
 The program writes all output to the standard output device.
+
+## Create a new service version
+To create a new service version, you need to increase the service version in module ```KarlsruheLibraryCards.pm```. Push the update.
+Create than a git version tag and push the tag to github.
+```
+git tag -a 'v1.0.1' -m 'Build version v1.0.1'
+git push origin master v1.0.1
+```
