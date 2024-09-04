@@ -110,7 +110,7 @@ sub pushStatusUpdates {
         if ( $deletedCards->{$cardNumber} eq 'deleted' ) {
             # Send status locked
             # Set local cardstatus = 'deleted'
-            $self->pushStatusUpdateAndSetLocalStatus({ card_number => $cardNumber, send_card_status => 'locked', set => 'active', type => 'deleted card number' });
+            $self->pushStatusUpdateAndSetLocalStatus({ card_number => $cardNumber, send_card_status => 'locked', set => 'deleted', type => 'deleted card number' });
         }
     }
 }
